@@ -1,0 +1,30 @@
+{
+  "name": "backbone.anchored-view",
+  "version": "0.0.1",
+  "description": "Backbone removable view",
+  "main": "backbone.anchored-view.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "keywords": [
+    "backbone"
+  ],
+  "author": "zyll",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-coffee": "~0.8.2",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-coffeelint": "0.0.8",
+    "grunt-mocha": "~0.4.10",
+    "mocha": "~1.17.0",
+    "chai": "~1.8.1",
+    "sinon": "~1.7.3",
+    "grunt-contrib-watch": "~0.5.3",
+    "sinon-chai": "~2.4.0",
+    "grunt-bower-task": "~0.3.4"
+  }
+}

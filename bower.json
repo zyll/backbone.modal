@@ -1,0 +1,26 @@
+{
+  "name": "backbone.modal",
+  "version": "0.0.1",
+  "authors": [
+    "klacointe <gilles.robit@af83.com>"
+  ],
+  "description": "Backbone modal box",
+  "main": "backbone.modal.js",
+  "keywords": [
+    "backbone"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "mousetrap": "~1.4.6",
+    "lodash": "~2.4.1",
+    "backbone": "~1.1.0"
+  }
+}
