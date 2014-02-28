@@ -1,8 +1,8 @@
 {
   "name": "backbone.modal",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "authors": [
-    "klacointe <gilles.robit@af83.com>"
+    "zyll <gilles.robit@af83.com>"
   ],
   "description": "Backbone modal box",
   "main": "backbone.modal.js",

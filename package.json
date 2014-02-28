@@ -1,8 +1,8 @@
 {
-  "name": "backbone.anchored-view",
+  "name": "backbone.modal",
   "version": "0.0.2",
-  "description": "Backbone removable view",
-  "main": "backbone.anchored-view.js",
+  "description": "Backbone modal box",
+  "main": "backbone.modal.js",
   "directories": {
     "test": "test"
   },
