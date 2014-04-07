@@ -44,6 +44,22 @@ describe 'Modal', ->
     it '.overlay', ->
       @modal.$('.overlay').trigger('click')
       expect(@spyClose).to.have.been.called
+  describe 'should not close when lock and click on', ->
+    beforeEach ->
+      @modal.display new Faked
+      @spyClose = sinon.spy()
+      @modal.lock()
+      @modal.on 'closed', @spyClose
+    afterEach ->
+      @modal.off 'closed', @spyClose
+
+    it '.close', ->
+      @modal.$('.close').click()
+      expect(@spyClose).to.not.have.been.called
+
+    it '.overlay', ->
+      @modal.$('.overlay').trigger('click')
+      expect(@spyClose).to.not.have.been.called
 
   describe 'when display a string', ->
     beforeEach ->

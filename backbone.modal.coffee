@@ -101,6 +101,7 @@ class Backbone.Modal extends Backbone.View
     @$el.hide()
     @trigger 'closed'
     @content()?.remove()
+    @lock off
     @
 
   open: =>
@@ -109,6 +110,11 @@ class Backbone.Modal extends Backbone.View
     @adjustPosition()
     @trigger 'opened'
     @
+
+  lock: (@turn=on)->
+    if @turn
+      @undelegateEvents()
+    else @delegateEve
 
   # @return current display promise (may be undefined)
   getPromise: ->

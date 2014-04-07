@@ -168,6 +168,7 @@
       if ((_ref2 = this.content()) != null) {
         _ref2.remove();
       }
+      this.lock(false);
       return this;
     };
 
@@ -177,6 +178,15 @@
       this.adjustPosition();
       this.trigger('opened');
       return this;
+    };
+
+    Modal.prototype.lock = function(turn) {
+      this.turn = turn != null ? turn : true;
+      if (this.turn) {
+        return this.undelegateEvents();
+      } else {
+        return this.delegateEve;
+      }
     };
 
     Modal.prototype.getPromise = function() {

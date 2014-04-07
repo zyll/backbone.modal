@@ -62,6 +62,25 @@
         return expect(this.spyClose).to.have.been.called;
       });
     });
+    describe('should not close when lock and click on', function() {
+      beforeEach(function() {
+        this.modal.display(new Faked);
+        this.spyClose = sinon.spy();
+        this.modal.lock();
+        return this.modal.on('closed', this.spyClose);
+      });
+      afterEach(function() {
+        return this.modal.off('closed', this.spyClose);
+      });
+      it('.close', function() {
+        this.modal.$('.close').click();
+        return expect(this.spyClose).to.not.have.been.called;
+      });
+      return it('.overlay', function() {
+        this.modal.$('.overlay').trigger('click');
+        return expect(this.spyClose).to.not.have.been.called;
+      });
+    });
     describe('when display a string', function() {
       beforeEach(function() {
         return this.m = this.modal.display(fakeModal);
