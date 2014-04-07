@@ -111,14 +111,14 @@ class Backbone.Modal extends Backbone.View
     @
 
   open: =>
-    Mousetrap.bind 'esc', @close
+    @lock off
     @$el.show()
     @adjustPosition()
     @trigger 'opened'
     @
 
   lock: (@_lock=on)->
-    if @turn
+    if @_lock
       Mousetrap.unbind 'esc'
     else
       Mousetrap.bind 'esc', @close

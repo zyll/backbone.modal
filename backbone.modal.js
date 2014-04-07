@@ -191,7 +191,7 @@
     };
 
     Modal.prototype.open = function() {
-      Mousetrap.bind('esc', this.close);
+      this.lock(false);
       this.$el.show();
       this.adjustPosition();
       this.trigger('opened');
@@ -200,7 +200,7 @@
 
     Modal.prototype.lock = function(_lock) {
       this._lock = _lock != null ? _lock : true;
-      if (this.turn) {
+      if (this._lock) {
         return Mousetrap.unbind('esc');
       } else {
         return Mousetrap.bind('esc', this.close);
