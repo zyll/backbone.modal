@@ -113,8 +113,11 @@ class Backbone.Modal extends Backbone.View
 
   lock: (@turn=on)->
     if @turn
+      Mousetrap.unbind 'esc'
       @undelegateEvents()
-    else @delegateEve
+    else
+      Mousetrap.bind 'esc', @close
+      @delegateEvents()
 
   # @return current display promise (may be undefined)
   getPromise: ->

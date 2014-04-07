@@ -183,9 +183,11 @@
     Modal.prototype.lock = function(turn) {
       this.turn = turn != null ? turn : true;
       if (this.turn) {
+        Mousetrap.unbind('esc');
         return this.undelegateEvents();
       } else {
-        return this.delegateEve;
+        Mousetrap.bind('esc', this.close);
+        return this.delegateEvents();
       }
     };
 
