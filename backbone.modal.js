@@ -47,10 +47,10 @@
     Modal.prototype.className = 'modal';
 
     Modal.prototype.events = {
-      'click .close': 'close',
-      'click .cancel': 'canceled',
-      'click .confirm': 'confirmed',
-      'click .overlay': 'close'
+      'click .close': 'onClose',
+      'click .cancel': 'onCanceled',
+      'click .confirm': 'onConfirmed',
+      'click .overlay': 'onClose'
     };
 
     Modal.prototype.initialize = function(options) {
@@ -135,33 +135,51 @@
       return this;
     };
 
-    Modal.prototype.canceled = function(event) {
+    Modal.prototype.onCanceled = function(event) {
       if (event != null) {
         if (typeof event.preventDefault === "function") {
           event.preventDefault();
         }
       }
+      if (!this._lock) {
+        return this.canceled();
+      }
+    };
+
+    Modal.prototype.canceled = function() {
       this.trigger('canceled');
       return this;
     };
 
-    Modal.prototype.confirmed = function(event) {
+    Modal.prototype.onConfirmed = function(event) {
       if (event != null) {
         if (typeof event.preventDefault === "function") {
           event.preventDefault();
         }
       }
+      if (!this._lock) {
+        return this.confirmed();
+      }
+    };
+
+    Modal.prototype.confirmed = function() {
       this.trigger('confirmed');
       return this;
     };
 
-    Modal.prototype.close = function(event) {
-      var _ref2;
+    Modal.prototype.onClose = function(event) {
       if (event != null) {
         if (typeof event.preventDefault === "function") {
           event.preventDefault();
         }
       }
+      if (!this._lock) {
+        return this.close();
+      }
+    };
+
+    Modal.prototype.close = function() {
+      var _ref2;
       Mousetrap.unbind('esc');
       this.$el.hide();
       this.trigger('closed');
@@ -180,14 +198,12 @@
       return this;
     };
 
-    Modal.prototype.lock = function(turn) {
-      this.turn = turn != null ? turn : true;
+    Modal.prototype.lock = function(_lock) {
+      this._lock = _lock != null ? _lock : true;
       if (this.turn) {
-        Mousetrap.unbind('esc');
-        return this.undelegateEvents();
+        return Mousetrap.unbind('esc');
       } else {
-        Mousetrap.bind('esc', this.close);
-        return this.delegateEvents();
+        return Mousetrap.bind('esc', this.close);
       }
     };
 

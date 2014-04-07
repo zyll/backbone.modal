@@ -22,10 +22,10 @@ class Backbone.Modal extends Backbone.View
   className: 'modal'
 
   events:
-    'click .close': 'close'
-    'click .cancel': 'canceled'
-    'click .confirm': 'confirmed'
-    'click .overlay': 'close'
+    'click .close': 'onClose'
+    'click .cancel': 'onCanceled'
+    'click .confirm': 'onConfirmed'
+    'click .overlay': 'onClose'
 
   # @params options {object}
   # @params options.layout {function} rendering layout template callback
@@ -84,19 +84,25 @@ class Backbone.Modal extends Backbone.View
     @content()?.render()
     @
 
-  canceled: (event)->
+  onCanceled: (event)->
     event?.preventDefault?()
+    @canceled() unless @_lock
+  canceled: ->
     @trigger 'canceled'
     @
 
-  confirmed: (event)->
+  onConfirmed: (event)->
     event?.preventDefault?()
+    @confirmed() unless @_lock
+  confirmed: ->
     @trigger 'confirmed'
     @
 
-  close: (event)=>
+  onClose: (event)->
     # be care, by using promise, event may be a model here
     event?.preventDefault?()
+    @close() unless @_lock
+  close: =>
     Mousetrap.unbind 'esc'
     @$el.hide()
     @trigger 'closed'
@@ -111,13 +117,11 @@ class Backbone.Modal extends Backbone.View
     @trigger 'opened'
     @
 
-  lock: (@turn=on)->
+  lock: (@_lock=on)->
     if @turn
       Mousetrap.unbind 'esc'
-      @undelegateEvents()
     else
       Mousetrap.bind 'esc', @close
-      @delegateEvents()
 
   # @return current display promise (may be undefined)
   getPromise: ->
