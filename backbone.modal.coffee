@@ -78,6 +78,8 @@ class Backbone.Modal extends Backbone.View
 
   render: ->
     @$el.html @layout()
+    @$close = @$ '.close'
+
     @$content = @$ '.content'
     if @$content isnt @content.$el
       @content()?.setElement @$content
@@ -119,6 +121,7 @@ class Backbone.Modal extends Backbone.View
 
   lock: (@_lock=on)->
     if @_lock
+      @$close.remove()
       Mousetrap.unbind 'esc'
     else
       Mousetrap.bind 'esc', @close

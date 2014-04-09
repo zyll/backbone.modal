@@ -123,6 +123,7 @@
     Modal.prototype.render = function() {
       var _ref2, _ref3;
       this.$el.html(this.layout());
+      this.$close = this.$('.close');
       this.$content = this.$('.content');
       if (this.$content !== this.content.$el) {
         if ((_ref2 = this.content()) != null) {
@@ -201,6 +202,7 @@
     Modal.prototype.lock = function(_lock) {
       this._lock = _lock != null ? _lock : true;
       if (this._lock) {
+        this.$close.remove();
         return Mousetrap.unbind('esc');
       } else {
         return Mousetrap.bind('esc', this.close);
