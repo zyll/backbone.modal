@@ -6,9 +6,8 @@ class Faked extends Backbone.View
 layout = _.template """
 <div class="overlay"></div>
 <div class="modal-container">
-  <div class="content">
-    <a class="close" href="#">CLOSE</a>
-  </div>
+  <div class="content"></div>
+  <a class="close" href="#" id="closeCross">CLOSE</a>
 </div>
 """
 fakeModal = '<p class="modaltpl"> My supa fake modal text.</p>'
@@ -44,6 +43,7 @@ describe 'Modal', ->
     it '.overlay', ->
       @modal.$('.overlay').trigger('click')
       expect(@spyClose).to.have.been.called
+
   describe 'should not close when lock and click on', ->
     beforeEach ->
       @modal.display new Faked
@@ -53,9 +53,8 @@ describe 'Modal', ->
     afterEach ->
       @modal.off 'closed', @spyClose
 
-    it '.close', ->
-      @modal.$('.close').click()
-      expect(@spyClose).to.not.have.been.called
+    it 'has no close cross', ->
+      expect(@modal.$ '#closeCross').to.have.length 0
 
     it '.overlay', ->
       @modal.$('.overlay').trigger('click')

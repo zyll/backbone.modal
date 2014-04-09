@@ -20,7 +20,7 @@
 
   })(Backbone.View);
 
-  layout = _.template("<div class=\"overlay\"></div>\n<div class=\"modal-container\">\n  <div class=\"content\">\n    <a class=\"close\" href=\"#\">CLOSE</a>\n  </div>\n</div>");
+  layout = _.template("<div class=\"overlay\"></div>\n<div class=\"modal-container\">\n  <div class=\"content\"></div>\n  <a class=\"close\" href=\"#\" id=\"closeCross\">CLOSE</a>\n</div>");
 
   fakeModal = '<p class="modaltpl"> My supa fake modal text.</p>';
 
@@ -72,9 +72,8 @@
       afterEach(function() {
         return this.modal.off('closed', this.spyClose);
       });
-      it('.close', function() {
-        this.modal.$('.close').click();
-        return expect(this.spyClose).to.not.have.been.called;
+      it('has no close cross', function() {
+        return expect(this.modal.$('#closeCross')).to.have.length(0);
       });
       return it('.overlay', function() {
         this.modal.$('.overlay').trigger('click');
