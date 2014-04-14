@@ -59,31 +59,46 @@
 
     Modal.prototype.show = function(v) {};
 
-    Modal.prototype.display = function(content) {
-      this.content(content);
-      this.eventActAs({
-        closed: 'reject'
-      });
-      return this.render().open();
+    Modal.prototype.display = function(content, options) {
+      var defaults;
+      if (options == null) {
+        options = {};
+      }
+      defaults = {
+        actAs: {
+          closed: 'reject'
+        }
+      };
+      return this.open(content, _.extend(defaults, options));
     };
 
-    Modal.prototype.notify = function(content) {
-      this.content(content);
-      this.eventActAs({
-        closed: 'resolve',
-        confirmed: 'resolve'
-      });
-      return this.render().open();
+    Modal.prototype.notify = function(content, options) {
+      var defaults;
+      if (options == null) {
+        options = {};
+      }
+      defaults = {
+        actAs: {
+          closed: 'resolve',
+          confirmed: 'resolve'
+        }
+      };
+      return this.open(content, _.extend(defaults, options));
     };
 
-    Modal.prototype.confirm = function(content) {
-      this.content(content);
-      this.eventActAs({
-        closed: 'reject',
-        canceled: 'reject',
-        confirmed: 'resolve'
-      });
-      return this.render().open();
+    Modal.prototype.confirm = function(content, options) {
+      var defaults;
+      if (options == null) {
+        options = {};
+      }
+      defaults = {
+        actAs: {
+          closed: 'reject',
+          canceled: 'reject',
+          confirmed: 'resolve'
+        }
+      };
+      return this.open(content, _.extend(defaults, options));
     };
 
     Modal.prototype.content = function(view) {
@@ -181,6 +196,9 @@
 
     Modal.prototype.close = function() {
       var _ref2;
+      if (this._timeout != null) {
+        window.clearTimeout(this._timeout);
+      }
       Mousetrap.unbind('esc');
       this.$el.hide();
       this.trigger('closed');
@@ -191,10 +209,17 @@
       return this;
     };
 
-    Modal.prototype.open = function() {
-      this.lock(false);
+    Modal.prototype.open = function(content, options) {
+      this.content(content);
+      this.eventActAs(options.actAs);
+      this.render();
+      console.log(options.lock);
+      this.lock((options.lock != null) && options.lock);
       this.$el.show();
       this.adjustPosition();
+      if (options.timeout != null) {
+        this._timeout = window.setTimeout(this.close, options.timeout);
+      }
       this.trigger('opened');
       return this;
     };

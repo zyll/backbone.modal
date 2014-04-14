@@ -36,19 +36,98 @@ describe 'Modal', ->
     afterEach ->
       @modal.off 'closed', @spyClose
 
-    it '.close', ->
-      @modal.$('.close').click()
-      expect(@spyClose).to.have.been.called
+    it 'close not cross', ->
+      @modal.$('.close').not('#closeCross').click()
+      expect(@spyClose).to.have.been.calledOnce
+
+    it 'close cross', ->
+      @modal.$('#closeCross').click()
+      expect(@spyClose).to.have.been.calledOnce
 
     it '.overlay', ->
       @modal.$('.overlay').trigger('click')
-      expect(@spyClose).to.have.been.called
+      expect(@spyClose).to.have.been.calledOnce
+
+  describe 'with a timeout option', ->
+    beforeEach ->
+      @clock = sinon.useFakeTimers()
+      @modal.display (new Faked), timeout: 3000
+      @spyClose = sinon.spy()
+      @modal.on 'closed', @spyClose
+
+    afterEach ->
+      @modal.off 'closed', @spyClose
+      @clock.restore()
+
+    describe 'when timeout is reach', ->
+      beforeEach ->
+        @clock.tick 3000
+
+      it 'close', ->
+        expect(@spyClose).to.have.been.calledOnce
+
+    describe 'when clicking on a close', ->
+      beforeEach ->
+        @modal.$('.close').first().click()
+
+      it '.close', ->
+        expect(@spyClose).to.have.been.calledOnce
+
+      describe 'when timeout is reach', ->
+        beforeEach ->
+          @clock.tick 4000
+
+        it 'doesnt try to close again', ->
+          expect(@spyClose).to.have.been.calledOnce
+
+  describe 'when locked and timeouted', ->
+    beforeEach ->
+      @clock = sinon.useFakeTimers()
+      @modal.display (new Faked), {timeout: 3000, lock: on}
+      @spyClose = sinon.spy()
+      @modal.on 'closed', @spyClose
+
+    afterEach ->
+      @modal.off 'closed', @spyClose
+      @clock.restore()
+
+    it 'display content', ->
+      expect(@modal.$ '.content .sofaked').to.have.length 1
+
+      it 'has no close cross', ->
+        expect(@modal.$ '#closeCross').to.have.length 0
+
+    it 'click on overlay is unaplicable', ->
+      @modal.$('.overlay').trigger('click')
+      expect(@spyClose).to.not.have.been.called
+
+    describe 'when timeout is reach', ->
+      beforeEach ->
+        @clock.tick 3000
+
+      it 'close', ->
+        expect(@spyClose).to.have.been.calledOnce
 
   describe 'should not close when lock and click on', ->
     beforeEach ->
       @modal.display new Faked
       @spyClose = sinon.spy()
       @modal.lock()
+      @modal.on 'closed', @spyClose
+    afterEach ->
+      @modal.off 'closed', @spyClose
+
+    it 'has no close cross', ->
+      expect(@modal.$ '#closeCross').to.have.length 0
+
+    it '.overlay', ->
+      @modal.$('.overlay').trigger('click')
+      expect(@spyClose).to.not.have.been.called
+
+  describe 'should not close when lock using options and click on', ->
+    beforeEach ->
+      @modal.display (new Faked), lock: on
+      @spyClose = sinon.spy()
       @modal.on 'closed', @spyClose
     afterEach ->
       @modal.off 'closed', @spyClose

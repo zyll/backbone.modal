@@ -53,13 +53,88 @@
       afterEach(function() {
         return this.modal.off('closed', this.spyClose);
       });
-      it('.close', function() {
-        this.modal.$('.close').click();
-        return expect(this.spyClose).to.have.been.called;
+      it('close not cross', function() {
+        this.modal.$('.close').not('#closeCross').click();
+        return expect(this.spyClose).to.have.been.calledOnce;
+      });
+      it('close cross', function() {
+        this.modal.$('#closeCross').click();
+        return expect(this.spyClose).to.have.been.calledOnce;
       });
       return it('.overlay', function() {
         this.modal.$('.overlay').trigger('click');
-        return expect(this.spyClose).to.have.been.called;
+        return expect(this.spyClose).to.have.been.calledOnce;
+      });
+    });
+    describe('with a timeout option', function() {
+      beforeEach(function() {
+        this.clock = sinon.useFakeTimers();
+        this.modal.display(new Faked, {
+          timeout: 3000
+        });
+        this.spyClose = sinon.spy();
+        return this.modal.on('closed', this.spyClose);
+      });
+      afterEach(function() {
+        this.modal.off('closed', this.spyClose);
+        return this.clock.restore();
+      });
+      describe('when timeout is reach', function() {
+        beforeEach(function() {
+          return this.clock.tick(3000);
+        });
+        return it('close', function() {
+          return expect(this.spyClose).to.have.been.calledOnce;
+        });
+      });
+      return describe('when clicking on a close', function() {
+        beforeEach(function() {
+          return this.modal.$('.close').first().click();
+        });
+        it('.close', function() {
+          return expect(this.spyClose).to.have.been.calledOnce;
+        });
+        return describe('when timeout is reach', function() {
+          beforeEach(function() {
+            return this.clock.tick(4000);
+          });
+          return it('doesnt try to close again', function() {
+            return expect(this.spyClose).to.have.been.calledOnce;
+          });
+        });
+      });
+    });
+    describe('when locked and timeouted', function() {
+      beforeEach(function() {
+        this.clock = sinon.useFakeTimers();
+        this.modal.display(new Faked, {
+          timeout: 3000,
+          lock: true
+        });
+        this.spyClose = sinon.spy();
+        return this.modal.on('closed', this.spyClose);
+      });
+      afterEach(function() {
+        this.modal.off('closed', this.spyClose);
+        return this.clock.restore();
+      });
+      it('display content', function() {
+        expect(this.modal.$('.content .sofaked')).to.have.length(1);
+        return it('has no close cross', function() {
+          return expect(this.modal.$('#closeCross')).to.have.length(0);
+        });
+      });
+      it('click on overlay is unaplicable', function() {
+        this.modal.$('.overlay').trigger('click');
+        return expect(this.spyClose).to.not.have.been.called;
+      });
+      return describe('when timeout is reach', function() {
+        beforeEach(function() {
+          return this.clock.tick(3000);
+        });
+        return it('close', function() {
+          return expect(this.spyClose).to.have.been.calledOnce;
+        });
       });
     });
     describe('should not close when lock and click on', function() {
@@ -67,6 +142,25 @@
         this.modal.display(new Faked);
         this.spyClose = sinon.spy();
         this.modal.lock();
+        return this.modal.on('closed', this.spyClose);
+      });
+      afterEach(function() {
+        return this.modal.off('closed', this.spyClose);
+      });
+      it('has no close cross', function() {
+        return expect(this.modal.$('#closeCross')).to.have.length(0);
+      });
+      return it('.overlay', function() {
+        this.modal.$('.overlay').trigger('click');
+        return expect(this.spyClose).to.not.have.been.called;
+      });
+    });
+    describe('should not close when lock using options and click on', function() {
+      beforeEach(function() {
+        this.modal.display(new Faked, {
+          lock: true
+        });
+        this.spyClose = sinon.spy();
         return this.modal.on('closed', this.spyClose);
       });
       afterEach(function() {

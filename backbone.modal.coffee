@@ -37,26 +37,26 @@ class Backbone.Modal extends Backbone.View
   # @todo noop ?
   show: (v)->
 
-  display: (content)=>
-    @content content
-    @eventActAs
-      closed: 'reject'
-    @render().open()
+  display: (content, options={})=>
+    defaults =
+      actAs:
+        closed: 'reject'
+    @open content, _.extend defaults, options
 
-  notify: (content)=>
-    @content content
-    @eventActAs
-      closed: 'resolve'
-      confirmed: 'resolve'
-    @render().open()
+  notify: (content, options={})=>
+    defaults =
+      actAs:
+        closed: 'resolve'
+        confirmed: 'resolve'
+    @open content, _.extend defaults, options
 
-  confirm: (content)=>
-    @content content
-    @eventActAs
-      closed: 'reject'
-      canceled: 'reject'
-      confirmed: 'resolve'
-    @render().open()
+  confirm: (content, options={})=>
+    defaults =
+      actAs:
+        closed: 'reject'
+        canceled: 'reject'
+        confirmed: 'resolve'
+    @open content, _.extend defaults, options
 
   content: (view)->
     if view and view isnt @_view
@@ -105,6 +105,7 @@ class Backbone.Modal extends Backbone.View
     event?.preventDefault?()
     @close() unless @_lock
   close: =>
+    window.clearTimeout @_timeout if @_timeout?
     Mousetrap.unbind 'esc'
     @$el.hide()
     @trigger 'closed'
@@ -112,10 +113,16 @@ class Backbone.Modal extends Backbone.View
     @lock off
     @
 
-  open: =>
-    @lock off
+  open: (content, options)=>
+    @content content
+    @eventActAs options.actAs
+    @render()
+    console.log options.lock
+    @lock(options.lock? and options.lock)
     @$el.show()
     @adjustPosition()
+    if options.timeout?
+      @_timeout = window.setTimeout @close, options.timeout
     @trigger 'opened'
     @
 
