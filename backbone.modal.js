@@ -8,7 +8,7 @@
 
   $ = (typeof require === "function" ? require("jquery") : void 0) || window.$;
 
-  _ = (typeof require === "function" ? require("undersore") : void 0) || window._;
+  _ = (typeof require === "function" ? require("underscore") : void 0) || window._;
 
   Promise = (typeof require === "function" ? require("promise") : void 0) || $.Deferred;
 

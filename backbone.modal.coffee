@@ -1,6 +1,6 @@
 Mousetrap = require?("mousetrap") || window.Mousetrap
 $ = require?("jquery") || window.$
-_ = require?("undersore") || window._
+_ = require?("underscore") || window._
 Promise = require?("promise") || $.Deferred
 Backbone = require?("backbone") || window.Backbone
 
