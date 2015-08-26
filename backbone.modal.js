@@ -1,10 +1,18 @@
 (function() {
-  var Promise, SimpleText, _ref, _ref1,
+  var $, Backbone, Modal, Mousetrap, Promise, SimpleText, _, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  Promise = $.Deferred;
+  Mousetrap = (typeof require === "function" ? require("mousetrap") : void 0) || window.Mousetrap;
+
+  $ = (typeof require === "function" ? require("jquery") : void 0) || window.$;
+
+  _ = (typeof require === "function" ? require("undersore") : void 0) || window._;
+
+  Promise = (typeof require === "function" ? require("promise") : void 0) || $.Deferred;
+
+  Backbone = (typeof require === "function" ? require("backbone") : void 0) || window.Backbone;
 
   SimpleText = (function(_super) {
     __extends(SimpleText, _super);
@@ -31,7 +39,7 @@
 
   })(Backbone.View);
 
-  Backbone.Modal = (function(_super) {
+  Modal = (function(_super) {
     __extends(Modal, _super);
 
     function Modal() {
@@ -246,5 +254,11 @@
     return Modal;
 
   })(Backbone.View);
+
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = Modal;
+  } else {
+    Backbone.Modal = Modal;
+  }
 
 }).call(this);

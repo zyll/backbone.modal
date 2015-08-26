@@ -1,6 +1,8 @@
-#= require mousetrap/mousetrap
-
-Promise = $.Deferred
+Mousetrap = require?("mousetrap") || window.Mousetrap
+$ = require?("jquery") || window.$
+_ = require?("undersore") || window._
+Promise = require?("promise") || $.Deferred
+Backbone = require?("backbone") || window.Backbone
 
 class SimpleText extends Backbone.View
 
@@ -18,7 +20,7 @@ class SimpleText extends Backbone.View
 # - Layer
 # - Close button (for modalised view with a promise options)
 # - Handle backbone / tpl resource
-class Backbone.Modal extends Backbone.View
+class Modal extends Backbone.View
   className: 'modal'
 
   events:
@@ -139,3 +141,8 @@ class Backbone.Modal extends Backbone.View
 
   adjustPosition: ->
     @$('.modal-container').css 'top', ($('html').scrollTop() or $('body').scrollTop()) + 30
+
+if module?
+  module.exports = Modal
+else
+  Backbone.Modal = Modal
